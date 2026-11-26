@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+
+const boundary = {
+  yes: [
+    'Criterion explanations, written from scratch, in plain language',
+    'Mark-band descriptors rewritten as "what this looks like" statements',
+    'Planning worksheets, checklists and timelines',
+    'Research-question framing guides with worked examples of weak → strong',
+    'Data handling and statistics primers (uncertainty, chi-squared, t-tests, error bars)',
+    'Citation and academic-honesty guides',
+    'Reflection prompts and supervisor-meeting agendas',
+    'Comment banks for feedback, written for you to adapt',
+  ],
+  no: [
+    'Full exemplar reports, at any grade level',
+    'Anything a student could submit unedited',
+    'Real datasets lifted from published investigations',
+    'Scanned or transcribed mark schemes',
+    'Recreations of official cover sheets or forms',
+    'Word-for-word criterion text from any official document',
+  ],
+};
+
+const strands = [
+  {
+    href: '/assessment/internal-assessment',
+    kicker: 'Internal Assessment',
+    title: 'The investigation',
+    body: 'Choosing a question that can actually be measured, designing a method that survives scrutiny, and writing up so the reader never has to guess.',
+    points: ['Research question', 'Method design', 'Data & uncertainty', 'Analysis', 'Evaluation'],
+  },
+  {
+    href: '/assessment/extended-essay',
+    kicker: 'Extended Essay',
+    title: 'The 4,000-word argument',
+    body: 'A research question narrow enough to answer, a structure that carries an argument, and a supervisor relationship that stays on schedule.',
+    points: ['Question framing', 'Literature', 'Structure', 'Argument', 'Reflection'],
+  },
+];
+---
+
+<BaseLayout
+  title="Assessment hub"
+  description="Guidance for independent research projects and extended essays: criterion explanations, planning worksheets, statistics primers and feedback banks. Nothing submittable as-is."
+>
+  <div class="shell page">
+    <Breadcrumb items={[{ href: '/', label: 'Home' }, { label: 'Assessment hub' }]} />
+
+    <header class="page__head">
+      <span class="eyebrow">Assessment</span>
+      <h1>Assessment hub</h1>
+      <p class="page__lede">
+        Independent research projects reward a narrow question and an honest method. This hub covers
+        the parts students most often get wrong — and it is deliberately incomplete in one specific
+        way.
+      </p>
+    </header>
+
+    <section class="block">
+      <h2>The line we do not cross</h2>
+      <p class="block__note">
+        Every page here is written to help a student do their own work. That means there is a
+        category of material that will never appear on this site, no matter how often it is
+        requested.
+      </p>
+
+      <div class="split">
+        <div class="panel panel--yes">
+          <h3>What you will find</h3>
+          <ul>
+            {boundary.yes.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <div class="panel panel--no">
+          <h3>What you will never find</h3>
+          <ul>
+            {boundary.no.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </div>
+
+      <div class="note note--warn">
+        <p>
+          <strong>Why the second column is empty on purpose.</strong> A finished exemplar teaches
+          almost nothing — it gives you a shape to copy without the thinking that produced it. Worse,
+          submitted work that is not yours is academic misconduct, and no guide is worth that. What
+          actually raises a grade is a method you can defend.
+        </p>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>The two projects</h2>
+      <ul class="strands">
+        {
+          strands.map((s) => (
+            <li>
+              <a class="card strand" href={s.href}>
+                <span class="eyebrow">{s.kicker}</span>
+                <span class="strand__title">{s.title}</span>
+                <span class="strand__body">{s.body}</span>
+                <span class="strand__points">
+                  {s.points.map((p) => (
+                    <span class="tag">{p}</span>
+                  ))}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>Coming next</h2>
+      <ul class="queue">
+        <li>
+          <span class="queue__label">Statistics primer</span>
+          <span class="queue__body"
+            >Uncertainty, error propagation, chi-squared, t-tests and when a correlation is not
+            evidence. Written for students who have never taken a statistics course.</span
+          >
+        </li>
+        <li>
+          <span class="queue__label">Timeline planner</span>
+          <span class="queue__body"
+            >A twelve-week schedule with the checkpoints that actually matter, printable and
+            shareable by link.</span
+          >
+        </li>
+        <li>
+          <span class="queue__label">Feedback comment bank</span>
+          <span class="queue__body"
+            >Ready-made phrasing for the comments teachers write forty times a term, in the
+            <a href="/tools/comment-bank">teacher tools</a> section.</span
+          >
+        </li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 64ch;
+    margin-bottom: 3.2rem;
+  }
+
+  .page__lede {
+    font-size: 1.06rem;
+    color: var(--ink-muted);
+  }
+
+  .block {
+    max-width: 72rem;
+  }
+
+  .block + .block {
+    margin-top: 3.6rem;
+  }
+
+  .block__note {
+    color: var(--ink-muted);
+    max-width: 66ch;
+    font-size: 0.95rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1rem;
+  }
+
+  .panel {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.6rem;
+    background: var(--paper-raised);
+  }
+
+  .panel h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .panel--yes h3 {
+    color: var(--moss);
+  }
+
+  .panel--no h3 {
+    color: var(--accent-deep);
+  }
+
+  .panel ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+  }
+
+  .panel li + li {
+    margin-top: 0.45em;
+  }
+
+  .note--warn {
+    margin-top: 1.4rem;
+  }
+
+  .strands {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .strand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+  }
+
+  .strand__title {
+    font-family: var(--font-display);
+    font-size: 1.16rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .strand__body {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    flex: 1;
+  }
+
+  .strand__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+  }
+
+  .queue {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .queue li {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .queue__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .queue__body {
+    color: var(--ink-muted);
+    font-size: 0.93rem;
+    max-width: 62ch;
+  }
+
+  @media (max-width: 44rem) {
+    .queue li {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+  }
+</style>

@@ -1,0 +1,423 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { SITE, SUBJECTS } from '../data/site';
+
+const units = await getCollection('units', (u) => u.data.status === 'published');
+const essUnits = units.filter((u) => u.data.subject === 'ess').sort((a, b) => a.data.order - b.data.order);
+const bioUnits = units
+  .filter((u) => u.data.subject === 'biology')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const featuredEss = essUnits.filter((u) => u.data.level === 'sl-hl').slice(0, 4);
+const featuredBio = bioUnits.slice(0, 4);
+
+const pillars = [
+  {
+    href: '/ess',
+    kicker: 'Subject notes',
+    title: 'Environmental systems',
+    body: 'Systems thinking, ecology, biodiversity, water, soil, atmosphere, climate and the human dimension.',
+    meta: `${essUnits.length} units`,
+  },
+  {
+    href: '/biology',
+    kicker: 'Subject notes',
+    title: 'Biology',
+    body: 'Molecules and cells through to organisms, ecology, genetics and continuity.',
+    meta: `${bioUnits.length} themes`,
+  },
+  {
+    href: '/assessment',
+    kicker: 'Assessment',
+    title: 'Internal assessment & extended essay',
+    body: 'Criterion-by-criterion guidance, research question design, statistics primers and reflection prompts.',
+    meta: 'Written from scratch',
+  },
+  {
+    href: '/tools',
+    kicker: 'Classroom',
+    title: 'Teacher tools',
+    body: 'Group picker, lesson timer, exit-ticket generator and comment bank. All run in the browser.',
+    meta: 'No accounts',
+  },
+];
+---
+
+<BaseLayout
+  title={SITE.name}
+  fullTitle={`${SITE.name} — ${SITE.tagline}`}
+  description={SITE.description}
+>
+  <section class="hero">
+    <div class="shell hero__inner">
+      <div class="hero__copy">
+        <span class="eyebrow">Original notes · free to read</span>
+        <h1>Field-ready notes for environmental systems and biology.</h1>
+        <p class="hero__lede">
+          Everything here is written from scratch — no copied syllabi, no scanned textbooks, no
+          rehosted material. Just explanations, worked examples and classroom tools that hold up
+          when you actually need them.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="/ess">Start with environmental systems</a>
+          <a class="btn btn--ghost" href="/assessment">Assessment hub</a>
+        </div>
+      </div>
+
+      <aside class="hero__card card">
+        <p class="hero__card-label">What you will not find here</p>
+        <ul class="hero__card-list">
+          <li>Reproduced syllabus documents or specimen papers</li>
+          <li>Scanned textbook pages or publisher diagrams</li>
+          <li>Complete exemplar reports you could submit as your own</li>
+          <li>Accounts, analytics, cookies or paywalls</li>
+        </ul>
+        <p class="hero__card-foot">
+          <a href="/disclaimer">How this site is sourced →</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <h2 class="section__title">Four ways in</h2>
+    <ul class="pillars">
+      {
+        pillars.map((p) => (
+          <li>
+            <a class="card pillar" href={p.href}>
+              <span class="eyebrow">{p.kicker}</span>
+              <span class="pillar__title">{p.title}</span>
+              <span class="pillar__body">{p.body}</span>
+              <span class="pillar__meta">{p.meta}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="shell section">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">Environmental systems</span>
+        <h2 class="section__title">{SUBJECTS.ess.blurb}</h2>
+      </div>
+      <a class="section__more" href="/ess">All {essUnits.length} units →</a>
+    </div>
+    <ul class="rows">
+      {
+        featuredEss.map((unit, i) => (
+          <li class="row">
+            <a href={`/ess/${unit.data.code}`}>
+              <span class="row__index">{String(i + 1).padStart(2, '0')}</span>
+              <span class="row__body">
+                <span class="row__title">{unit.data.title}</span>
+                <span class="row__summary">{unit.data.summary}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="shell section">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">Biology</span>
+        <h2 class="section__title">{SUBJECTS.biology.blurb}</h2>
+      </div>
+      <a class="section__more" href="/biology">All {bioUnits.length} themes →</a>
+    </div>
+    <ul class="rows">
+      {
+        featuredBio.map((unit, i) => (
+          <li class="row">
+            <a href={`/biology/${unit.data.code}`}>
+              <span class="row__index">{String(i + 1).padStart(2, '0')}</span>
+              <span class="row__body">
+                <span class="row__title">{unit.data.title}</span>
+                <span class="row__summary">{unit.data.summary}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="shell section">
+    <div class="principles">
+      <div>
+        <span class="eyebrow">How this works</span>
+        <h2>Three rules the whole site runs on.</h2>
+      </div>
+      <ol class="principles__list">
+        <li>
+          <strong>If it came from the awarding body, it does not ship.</strong>
+          <span>
+            Every page is checked by an automated provenance gate before it can build. Content
+            that is not authored here sits in a staging folder and never reaches the published site.
+          </span>
+        </li>
+        <li>
+          <strong>Explanations, not exemplars.</strong>
+          <span>
+            You get the reasoning, the method and the vocabulary. You do not get a finished piece
+            of work with your name on it — that is the point.
+          </span>
+        </li>
+        <li>
+          <strong>No accounts, no tracking, no nonsense.</strong>
+          <span>
+            The teacher tools run entirely in your browser and save to local storage. Nothing
+            leaves your machine.
+          </span>
+        </li>
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 3.5rem 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .hero__lede {
+    font-size: 1.1rem;
+    color: var(--ink-muted);
+    max-width: 52ch;
+    margin-top: 1rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.8rem;
+  }
+
+  .hero__card {
+    background: var(--paper-sunk);
+    border-color: var(--rule-strong);
+  }
+
+  .hero__card-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9em;
+  }
+
+  .hero__card-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.92rem;
+    color: var(--ink-muted);
+  }
+
+  .hero__card-list li + li {
+    margin-top: 0.45em;
+  }
+
+  .hero__card-foot {
+    margin: 1.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: 0.84rem;
+  }
+
+  .hero__card-foot a {
+    text-decoration: none;
+  }
+
+  .section {
+    padding-block: 3.2rem 0;
+  }
+
+  .section__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.6rem;
+  }
+
+  .section__title {
+    margin: 0;
+    max-width: 46ch;
+  }
+
+  .section__more {
+    font-family: var(--font-display);
+    font-size: 0.86rem;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    height: 100%;
+  }
+
+  .pillar__title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .pillar__body {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    flex: 1;
+  }
+
+  .pillar__meta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 0.5rem;
+  }
+
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .row a {
+    display: grid;
+    grid-template-columns: 3.2rem 1fr;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--rule);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .row a:hover .row__title {
+    color: var(--accent-deep);
+  }
+
+  .row__index {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    padding-top: 0.35em;
+  }
+
+  .row__title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-bottom: 0.2em;
+    transition: color 140ms ease;
+  }
+
+  .row__summary {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 0.94rem;
+    max-width: 68ch;
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    gap: 3rem;
+    padding: 2.4rem;
+    background: var(--paper-sunk);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .principles h2 {
+    margin: 0;
+  }
+
+  .principles__list {
+    list-style: none;
+    counter-reset: p;
+    margin: 0;
+    padding: 0;
+  }
+
+  .principles__list li {
+    counter-increment: p;
+    padding-left: 2.4rem;
+    position: relative;
+  }
+
+  .principles__list li + li {
+    margin-top: 1.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .principles__list li::before {
+    content: counter(p);
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    width: 1.55rem;
+    height: 1.55rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .principles__list strong {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.3em;
+  }
+
+  .principles__list span {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 60rem) {
+    .hero__inner,
+    .principles {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

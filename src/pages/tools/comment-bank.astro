@@ -1,0 +1,372 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const bank = [
+  {
+    area: 'Research question',
+    notes: [
+      {
+        need: 'Too broad to answer',
+        text: 'The question covers more ground than the study can reach. Narrowing it to one site, one season or one variable would let the evidence actually bear on the answer.',
+      },
+      {
+        need: 'No measurable variables',
+        text: 'The question names an idea rather than a quantity. Identifying what will be measured, and in what units, is the next step before any method can be designed.',
+      },
+      {
+        need: 'Answer is obvious in advance',
+        text: 'The outcome is already settled by common knowledge, so the study cannot surprise anyone. Reframing so that either result would be informative would make the work worth doing.',
+      },
+    ],
+  },
+  {
+    area: 'Method',
+    notes: [
+      {
+        need: 'Sample too small',
+        text: 'The sample is too small to distinguish a real pattern from variation between individuals. Increasing the number of replicates is the single change that would most improve this work.',
+      },
+      {
+        need: 'No controls described',
+        text: 'Variables that could explain the result are not accounted for. Naming them and stating how each was held constant would make the method repeatable.',
+      },
+      {
+        need: 'Sampling not random',
+        text: 'The sampling was chosen for convenience, which introduces a bias that cannot be corrected afterwards. Describing a randomisation procedure would strengthen the design.',
+      },
+      {
+        need: 'Not repeatable as written',
+        text: 'A reader could not reproduce this method without asking questions. Adding quantities, timings and equipment resolution would close that gap.',
+      },
+    ],
+  },
+  {
+    area: 'Data handling',
+    notes: [
+      {
+        need: 'Uncertainty missing',
+        text: 'Readings are reported as exact values. Recording the precision of each instrument, and carrying that uncertainty through to the processed result, would make the analysis honest.',
+      },
+      {
+        need: 'Wrong test chosen',
+        text: 'The statistical test does not match the data type. Checking whether the variables are continuous or categorical, and paired or independent, would point to the appropriate test.',
+      },
+      {
+        need: 'Significance overclaimed',
+        text: 'The result is described as significant without a stated test or probability. Reporting the test, its assumptions and the p-value would support or qualify that claim.',
+      },
+      {
+        need: 'Correlation read as cause',
+        text: 'The analysis shows that two variables moved together, which is not the same as one causing the other. Separating the association from a causal claim would make the conclusion defensible.',
+      },
+    ],
+  },
+  {
+    area: 'Evaluation',
+    notes: [
+      {
+        need: 'Limitations too general',
+        text: 'The limitations named could apply to any study. Linking each one to a specific effect on specific data would show how it actually shaped the conclusion.',
+      },
+      {
+        need: 'Improvements unrealistic',
+        text: 'The suggested improvements rely on equipment or time that is not available. Proposing changes within the same constraints would be more useful.',
+      },
+      {
+        need: 'Conclusion ignores the question',
+        text: 'The conclusion answers a broader question than the one asked. Returning to the stated research question would tighten the ending.',
+      },
+      {
+        need: 'No extension offered',
+        text: 'The findings raise an obvious follow-up that is not mentioned. Suggesting what the next study should test would demonstrate understanding of the result.',
+      },
+    ],
+  },
+  {
+    area: 'Writing',
+    notes: [
+      {
+        need: 'Description without purpose',
+        text: 'This section describes background that the argument does not use. Cutting it, or connecting it to the claim it supports, would keep the reader oriented.',
+      },
+      {
+        need: 'Citation does not support the claim',
+        text: 'The cited source does not appear to say what the sentence claims. Checking the original and adjusting the sentence or the reference would resolve it.',
+      },
+      {
+        need: 'Claim outruns evidence',
+        text: 'The claim is stronger than the evidence presented can carry. Qualifying the wording to match what was actually shown would make it credible.',
+      },
+      {
+        need: 'Structure hard to follow',
+        text: 'The order of sections does not reveal the argument. Stating each section\'s claim in a heading, then ordering them so each depends on the last, would help.',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Feedback comment bank"
+  description="Ready-made feedback phrasing for science reports, sorted by what the student needs to do next. Copy a comment, adapt it, paste it. No account, nothing uploaded."
+>
+  <div class="shell page">
+    <Breadcrumb
+      items={[
+        { href: '/', label: 'Home' },
+        { href: '/tools', label: 'Teacher tools' },
+        { label: 'Feedback comment bank' },
+      ]}
+    />
+
+    <header class="page__head">
+      <span class="eyebrow">Feedback tool</span>
+      <h1>Feedback comment bank</h1>
+      <p class="page__lede">
+        The comments you write forty times a term, already written — sorted by what the student needs
+        to do next rather than by what is wrong.
+      </p>
+    </header>
+
+    <div class="toolbar">
+      <label class="field field--search">
+        <span>Filter</span>
+        <input id="filter" type="search" placeholder="e.g. uncertainty, sample, citation" />
+      </label>
+      <p class="toolbar__count" id="count"></p>
+    </div>
+
+    <div class="bank" id="bank">
+      {
+        bank.map((group) => (
+          <section class="group" data-area={group.area}>
+            <h2 class="group__title">{group.area}</h2>
+            <ul class="notes">
+              {group.notes.map((note) => (
+                <li class="note-item" data-search={`${note.need} ${note.text}`.toLowerCase()}>
+                  <div class="note-item__head">
+                    <span class="note-item__need">{note.need}</span>
+                    <button class="note-item__copy" type="button" aria-label={`Copy comment: ${note.need}`}>
+                      Copy
+                    </button>
+                  </div>
+                  <p class="note-item__text">{note.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+      <p class="empty" id="empty" hidden>No comments match that filter.</p>
+    </div>
+
+    <section class="foot">
+      <div class="note">
+        <p>
+          <strong>Adapt, don't paste.</strong> These are starting points. A comment that names
+          something specific from the student's own work does more than a perfect sentence that could
+          have been written about anyone.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 60ch;
+    margin-bottom: 2.2rem;
+  }
+
+  .page__lede {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: end;
+    gap: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2rem;
+  }
+
+  .field--search {
+    margin: 0;
+    flex: 1;
+    max-width: 26rem;
+  }
+
+  .toolbar__count {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 0.55rem auto;
+  }
+
+  .group + .group {
+    margin-top: 2.6rem;
+  }
+
+  .group__title {
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 1rem;
+  }
+
+  .notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr));
+    gap: 0.8rem;
+  }
+
+  .note-item {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .note-item__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .note-item__need {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+  }
+
+  .note-item__copy {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 0.2em 0.55em;
+    border-radius: 999px;
+    cursor: pointer;
+    flex: none;
+  }
+
+  .note-item__copy:hover {
+    border-color: var(--accent);
+    color: var(--accent-deep);
+  }
+
+  .note-item__copy[data-done='1'] {
+    background: var(--moss-wash);
+    border-color: var(--moss);
+    color: var(--moss);
+  }
+
+  .note-item__text {
+    margin: 0;
+    font-family: var(--font-prose);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .empty {
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+    padding: 1.6rem 0;
+  }
+
+  .foot {
+    margin-top: 2.8rem;
+    max-width: 70ch;
+  }
+
+  @media (max-width: 44rem) {
+    .toolbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.6rem;
+    }
+    .toolbar__count {
+      margin: 0;
+    }
+  }
+</style>
+
+<script>
+  const filterEl = document.getElementById('filter') as HTMLInputElement;
+  const countEl = document.getElementById('count')!;
+  const emptyEl = document.getElementById('empty')!;
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.note-item'));
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('.group'));
+
+  function apply() {
+    const q = filterEl.value.trim().toLowerCase();
+    let shown = 0;
+
+    for (const item of items) {
+      const hay = item.dataset.search ?? '';
+      const match = !q || hay.includes(q);
+      item.hidden = !match;
+      if (match) shown++;
+    }
+
+    for (const group of groups) {
+      const any = Array.from(group.querySelectorAll<HTMLElement>('.note-item')).some((i) => !i.hidden);
+      group.hidden = !any;
+    }
+
+    emptyEl.hidden = shown > 0;
+    countEl.textContent = `${shown} of ${items.length} comments`;
+  }
+
+  filterEl.addEventListener('input', apply);
+
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.note-item__copy');
+    if (!btn) return;
+    const text = btn.closest('.note-item')?.querySelector('.note-item__text')?.textContent ?? '';
+    try {
+      await navigator.clipboard.writeText(text.trim());
+      btn.textContent = 'Copied';
+      btn.dataset.done = '1';
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        delete btn.dataset.done;
+      }, 1400);
+    } catch {
+      btn.textContent = 'Select';
+      const range = document.createRange();
+      const target = btn.closest('.note-item')?.querySelector('.note-item__text');
+      if (target) {
+        range.selectNodeContents(target);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+    }
+  });
+
+  apply();
+</script>

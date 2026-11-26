@@ -1,0 +1,296 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const stages = [
+  {
+    n: '01',
+    title: 'Framing the question',
+    lead: 'A research question is a promise about what you will measure. Most weak projects fail here, not in the lab.',
+    good: 'How does canopy cover affect soil moisture at four depths on a north-facing slope over six weeks?',
+    bad: 'Is deforestation bad for the environment?',
+    why: 'The weak version has no measurable variable, no boundary and no possible answer that is not already obvious. The strong version names the independent variable, the dependent variable, the setting and the duration — so the method writes itself.',
+    checks: [
+      'Two variables, both measurable with equipment you can actually get',
+      'A stated setting and time frame',
+      'An outcome that could genuinely come out either way',
+      'Something you can finish in the time available',
+    ],
+  },
+  {
+    n: '02',
+    title: 'Designing the method',
+    lead: 'A method is a set of decisions someone else could repeat without asking you a question.',
+    good: 'Five quadrats per zone, placed by random coordinates, sampled at the same time of day to control for temperature.',
+    bad: 'Sample the plants in the area.',
+    why: 'Repeatability is the whole point. If a reader cannot reproduce your sampling, your data is a story rather than evidence. Every choice that affects the numbers needs a stated reason.',
+    checks: [
+      'Sample size justified, not just chosen for convenience',
+      'Controls identified and explained',
+      'Randomisation described precisely enough to redo',
+      'Equipment and resolution recorded',
+      'Ethical and safety considerations addressed',
+    ],
+  },
+  {
+    n: '03',
+    title: 'Collecting and recording',
+    lead: 'Raw data recorded honestly is worth more than clean data recorded late.',
+    good: 'Field sheet with date, time, GPS, observer initials and instrument ID on every page; original sheets retained.',
+    bad: 'Typing numbers into a spreadsheet from memory the night before the deadline.',
+    why: 'Provenance is the difference between data and invention. Keeping the original record also means you can defend any value months later — and it protects you if a reading looks like an outlier.',
+    checks: [
+      'Original field notes kept and dated',
+      'Units and uncertainty recorded alongside every value',
+      'Anomalies noted at the time, not deleted later',
+      'Repeat measurements where variation is expected',
+    ],
+  },
+  {
+    n: '04',
+    title: 'Handling the numbers',
+    lead: 'Statistics are not decoration. Each test answers a specific question, and using the wrong one is worse than using none.',
+    good: 'A stated null hypothesis, a test chosen to match the data type, a reported p-value and an effect size.',
+    bad: 'A scatter graph with a trendline and the word "correlation" in the caption.',
+    why: 'A trendline shows that two things moved together. It cannot tell you whether the pattern is larger than chance, and it never establishes cause. Naming the test and its assumptions is what turns a graph into an argument.',
+    checks: [
+      'Null and alternative hypotheses written before testing',
+      'Test matches the data: continuous vs categorical, paired vs independent',
+      'Assumptions checked, not assumed',
+      'Uncertainty propagated, not ignored',
+      'Effect size reported alongside significance',
+    ],
+  },
+  {
+    n: '05',
+    title: 'Evaluating honestly',
+    lead: 'The evaluation is where you earn marks by being harder on yourself than the reader would be.',
+    good: 'Small sample size limited statistical power; a single season means the result may not generalise; one quadrat was partially shaded, which likely depressed the count.',
+    bad: 'The experiment went well and the results were as expected.',
+    why: 'A limitation that is named and explained is evidence of understanding. A limitation that is hidden reads as either inexperience or dishonesty. Specific beats general every time.',
+    checks: [
+      'Limitations tied to specific effects on specific data',
+      'Improvements that are realistic, not fantasy equipment',
+      'Conclusion answers the question that was actually asked',
+      'Extension suggested that follows from the findings',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Internal assessment"
+  description="How to frame a research question, design a repeatable method, handle uncertainty and write an evaluation that earns credit. Written from scratch for independent student investigations."
+>
+  <div class="shell page">
+    <Breadcrumb
+      items={[
+        { href: '/', label: 'Home' },
+        { href: '/assessment', label: 'Assessment hub' },
+        { label: 'Internal assessment' },
+      ]}
+    />
+
+    <header class="page__head">
+      <span class="eyebrow">Assessment hub</span>
+      <h1>The investigation</h1>
+      <p class="page__lede">
+        Five stages, in the order they cause trouble. Each one pairs a weak example with a strong one
+        and explains what changed — because the difference between a middling project and a good one
+        is almost always specificity.
+      </p>
+      <div class="note note--warn">
+        <p>
+          <strong>Nothing here is submittable.</strong> These are explanations and checklists. No
+          exemplar reports, no real datasets, no wording you can paste into a document and hand in.
+          See the <a href="/assessment">assessment hub</a> for why.
+        </p>
+      </div>
+    </header>
+
+    <ol class="stages">
+      {
+        stages.map((s) => (
+          <li class="stage">
+            <div class="stage__head">
+              <span class="stage__n">{s.n}</span>
+              <h2>{s.title}</h2>
+            </div>
+            <p class="stage__lead">{s.lead}</p>
+
+            <div class="compare">
+              <div class="compare__col compare__col--good">
+                <span class="compare__label">Stronger</span>
+                <p>{s.good}</p>
+              </div>
+              <div class="compare__col compare__col--bad">
+                <span class="compare__label">Weaker</span>
+                <p>{s.bad}</p>
+              </div>
+            </div>
+
+            <p class="stage__why">{s.why}</p>
+
+            <div class="checks">
+              <p class="checks__label">Check before you move on</p>
+              <ul>
+                {s.checks.map((c) => (
+                  <li>{c}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <section class="foot">
+      <div class="note">
+        <p>
+          <strong>Next:</strong> the statistics primer — uncertainty, error propagation and choosing a
+          test — is in progress. The <a href="/tools">teacher tools</a> include a comment bank you can
+          use to give feedback on any of these stages.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 66ch;
+    margin-bottom: 3.4rem;
+  }
+
+  .page__lede {
+    font-size: 1.06rem;
+    color: var(--ink-muted);
+  }
+
+  .note--warn {
+    margin-top: 1.6rem;
+  }
+
+  .stages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .stage {
+    max-width: 70ch;
+    padding-block: 2.4rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .stage:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .stage__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .stage__n {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+
+  .stage__head h2 {
+    font-size: 1.32rem;
+    margin: 0;
+  }
+
+  .stage__lead {
+    color: var(--ink-muted);
+    font-size: 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .compare__col {
+    border: 1px solid var(--rule);
+    border-left-width: 3px;
+    border-radius: var(--radius);
+    padding: 0.9rem 1.1rem;
+    background: var(--paper-raised);
+  }
+
+  .compare__col--good {
+    border-left-color: var(--moss);
+  }
+
+  .compare__col--bad {
+    border-left-color: var(--accent);
+  }
+
+  .compare__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.45em;
+  }
+
+  .compare__col p {
+    margin: 0;
+    font-family: var(--font-prose);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .stage__why {
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    max-width: 66ch;
+  }
+
+  .checks {
+    margin-top: 1.4rem;
+    background: var(--paper-sunk);
+    border-radius: var(--radius);
+    padding: 1rem 1.3rem;
+  }
+
+  .checks__label {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 0.6em;
+  }
+
+  .checks ul {
+    margin: 0;
+    padding-left: 1.05rem;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+  }
+
+  .checks li + li {
+    margin-top: 0.35em;
+  }
+
+  .foot {
+    margin-top: 2.6rem;
+    max-width: 70ch;
+  }
+</style>

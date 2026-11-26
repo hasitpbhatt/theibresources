@@ -1,0 +1,454 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="Group picker"
+  description="Split a class into balanced groups instantly. Keep chosen students apart, remember your roster on this device, and share a setup by link. No account, no upload."
+>
+  <div class="shell page">
+    <Breadcrumb
+      items={[
+        { href: '/', label: 'Home' },
+        { href: '/tools', label: 'Teacher tools' },
+        { label: 'Group picker' },
+      ]}
+    />
+
+    <header class="page__head">
+      <span class="eyebrow">Classroom tool</span>
+      <h1>Group picker</h1>
+      <p class="page__lede">
+        Paste your class list, choose how many groups you want, and get a shuffled split. Anyone you
+        keep apart will land in different groups.
+      </p>
+    </header>
+
+    <div class="app" id="app">
+      <div class="app__panel">
+        <label class="field">
+          <span>Class list — one name per line</span>
+          <textarea id="roster" rows="10" spellcheck="false" placeholder="Ada Lovelace&#10;Rosalind Franklin&#10;Wangari Maathai"></textarea>
+        </label>
+
+        <div class="controls">
+          <label class="field field--inline">
+            <span>Groups</span>
+            <input id="groupCount" type="number" min="2" max="12" value="4" />
+          </label>
+          <label class="field field--inline">
+            <span>Keep apart</span>
+            <select id="apartMode">
+              <option value="off">Don't</option>
+              <option value="on">Yes, separate pairs</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="field" id="apartWrap" hidden>
+          <span>Pairs to keep apart — one pair per line, comma separated</span>
+          <textarea id="apartPairs" rows="4" spellcheck="false" placeholder="Ada Lovelace, Rosalind Franklin"></textarea>
+        </label>
+
+        <div class="actions">
+          <button class="btn" id="shuffle" type="button">Shuffle groups</button>
+          <button class="btn btn--ghost" id="copyLink" type="button">Copy share link</button>
+          <button class="btn btn--ghost" id="clear" type="button">Clear saved</button>
+        </div>
+        <p class="hint" id="hint" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="app__out">
+        <div id="result" class="result" aria-live="polite">
+          <p class="result__empty">Groups will appear here.</p>
+        </div>
+        <div class="actions actions--out">
+          <button class="btn btn--ghost" id="print" type="button">Print</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="foot">
+      <div class="note">
+        <p>
+          <strong>How the keeping-apart works.</strong> Names are shuffled, then anyone with a
+          conflict is moved to the next group that has room and no conflict. With very tight
+          constraints the tool will tell you rather than silently breaking a pair.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 60ch;
+    margin-bottom: 2.6rem;
+  }
+
+  .page__lede {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .app__panel {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+    padding: 1.4rem;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .field--inline {
+    margin: 0;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+
+  .actions--out {
+    margin-top: 0.9rem;
+    justify-content: flex-end;
+  }
+
+  .hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    min-height: 1.2em;
+    margin: 0.7rem 0 0;
+  }
+
+  .result__empty {
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius);
+    padding: 2.2rem 1rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.9rem;
+    margin: 0;
+  }
+
+  .group {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+    overflow: hidden;
+  }
+
+  .group__head {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    background: var(--accent-wash);
+    padding: 0.5rem 0.8rem;
+  }
+
+  .group__list {
+    list-style: none;
+    margin: 0;
+    padding: 0.7rem 0.8rem;
+    font-size: 0.92rem;
+  }
+
+  .group__list li + li {
+    margin-top: 0.3em;
+  }
+
+  .foot {
+    margin-top: 2.8rem;
+    max-width: 70ch;
+  }
+
+  @media (max-width: 56rem) {
+    .app {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media print {
+    .page__head,
+    .foot,
+    .app__panel,
+    .actions,
+    :global(header),
+    :global(footer),
+    :global(.breadcrumb) {
+      display: none !important;
+    }
+    .app {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const STORE = 'fn.groupPicker.v1';
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+  const toBase64 = (text: string) => {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary);
+  };
+
+  const fromBase64 = (hash: string) => {
+    const binary = atob(hash);
+    const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  };
+
+  const rosterEl = $<HTMLTextAreaElement>('roster');
+  const countEl = $<HTMLInputElement>('groupCount');
+  const apartModeEl = $<HTMLSelectElement>('apartMode');
+  const apartWrapEl = $<HTMLElement>('apartWrap');
+  const apartPairsEl = $<HTMLTextAreaElement>('apartPairs');
+  const resultEl = $<HTMLElement>('result');
+  const hintEl = $<HTMLElement>('hint');
+
+  type Saved = { roster: string; count: number; apartMode: string; pairs: string };
+
+  const readNames = (raw: string) =>
+    raw
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+  const readPairs = (raw: string) =>
+    raw
+      .split(/\r?\n/)
+      .map((line) => line.split(',').map((s) => s.trim()))
+      .filter((p) => p.length >= 2 && p[0] && p[1])
+      .map((p) => [p[0], p[1]] as [string, string]);
+
+  function shuffle<T>(arr: T[]): T[] {
+    const out = arr.slice();
+    for (let i = out.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
+  }
+
+  function buildGroups(names: string[], groupCount: number, pairs: [string, string][]) {
+    const buckets: string[][] = Array.from({ length: groupCount }, () => []);
+    const conflict = new Map<string, Set<string>>();
+
+    for (const [a, b] of pairs) {
+      if (!names.includes(a) || !names.includes(b)) continue;
+      if (!conflict.has(a)) conflict.set(a, new Set());
+      if (!conflict.has(b)) conflict.set(b, new Set());
+      conflict.get(a)!.add(b);
+      conflict.get(b)!.add(a);
+    }
+
+    const order = shuffle(names);
+    const unresolved: string[] = [];
+
+    for (const name of order) {
+      const blockers = conflict.get(name) ?? new Set<string>();
+      let placed = false;
+
+      // Prefer the emptiest group with no conflicting member.
+      const candidates = buckets
+        .map((members, index) => ({ members, index }))
+        .filter(({ members }) => !members.some((m) => blockers.has(m)))
+        .sort((a, b) => a.members.length - b.members.length);
+
+      for (const { members } of candidates) {
+        if (members.length < Math.ceil(names.length / groupCount)) {
+          members.push(name);
+          placed = true;
+          break;
+        }
+      }
+
+      if (!placed && candidates.length > 0) {
+        candidates[0].members.push(name);
+        placed = true;
+      }
+
+      if (!placed) unresolved.push(name);
+    }
+
+    // Any name with no legal group left goes to the smallest group and is reported.
+    for (const name of unresolved) {
+      const target = buckets.reduce((a, b) => (a.length <= b.length ? a : b));
+      target.push(name);
+    }
+
+    return { buckets, unresolved };
+  }
+
+  function render(buckets: string[][], unresolved: string[]) {
+    if (buckets.every((b) => b.length === 0)) {
+      resultEl.innerHTML = '<p class="result__empty">Groups will appear here.</p>';
+      return;
+    }
+
+    const html = buckets
+      .map((members, i) => {
+        const items = members.map((m) => `<li>${escapeHtml(m)}</li>`).join('');
+        return `<section class="group">
+          <div class="group__head">Group ${i + 1} · ${members.length}</div>
+          <ul class="group__list">${items}</ul>
+        </section>`;
+      })
+      .join('');
+
+    resultEl.innerHTML = `<div class="groups">${html}</div>`;
+
+    hintEl.textContent = unresolved.length
+      ? `Could not keep apart: ${unresolved.join(', ')} — not enough groups for the constraints.`
+      : '';
+  }
+
+  function escapeHtml(s: string) {
+    return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  }
+
+  function current(): Saved {
+    return {
+      roster: rosterEl.value,
+      count: Number(countEl.value) || 4,
+      apartMode: apartModeEl.value,
+      pairs: apartPairsEl.value,
+    };
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORE, JSON.stringify(current()));
+    } catch {
+      /* storage may be blocked; the tool still works for this session */
+    }
+  }
+
+  function restore() {
+    let data: Saved | null = null;
+
+    const hash = location.hash.slice(1);
+    if (hash) {
+      try {
+        data = JSON.parse(fromBase64(hash)) as Saved;
+      } catch {
+        data = null;
+      }
+    }
+
+    if (!data) {
+      try {
+        const raw = localStorage.getItem(STORE);
+        if (raw) data = JSON.parse(raw) as Saved;
+      } catch {
+        data = null;
+      }
+    }
+
+    if (!data) return;
+
+    rosterEl.value = data.roster ?? '';
+    countEl.value = String(data.count ?? 4);
+    apartModeEl.value = data.apartMode ?? 'off';
+    apartPairsEl.value = data.pairs ?? '';
+    apartWrapEl.hidden = apartModeEl.value !== 'on';
+  }
+
+  function run() {
+    const names = readNames(rosterEl.value);
+    const count = Math.min(Math.max(Number(countEl.value) || 2, 2), 12);
+    const pairs = apartModeEl.value === 'on' ? readPairs(apartPairsEl.value) : [];
+
+    if (names.length === 0) {
+      resultEl.innerHTML = '<p class="result__empty">Add some names first.</p>';
+      hintEl.textContent = '';
+      return;
+    }
+
+    if (names.length < count) {
+      hintEl.textContent = `Only ${names.length} name${names.length === 1 ? '' : 's'} for ${count} groups.`;
+    }
+
+    const { buckets, unresolved } = buildGroups(names, count, pairs);
+    render(buckets, unresolved);
+    save();
+  }
+
+  apartModeEl.addEventListener('change', () => {
+    apartWrapEl.hidden = apartModeEl.value !== 'on';
+    save();
+  });
+
+  rosterEl.addEventListener('input', save);
+  countEl.addEventListener('input', save);
+  apartPairsEl.addEventListener('input', save);
+
+  $('shuffle').addEventListener('click', run);
+
+  $('copyLink').addEventListener('click', async () => {
+    save();
+    const payload = toBase64(JSON.stringify(current()));
+    const url = `${location.origin}${location.pathname}#${payload}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      hintEl.textContent = 'Share link copied.';
+    } catch {
+      hintEl.textContent = url;
+    }
+  });
+
+  $('clear').addEventListener('click', () => {
+    try {
+      localStorage.removeItem(STORE);
+    } catch {
+      /* ignore */
+    }
+    rosterEl.value = '';
+    apartPairsEl.value = '';
+    apartModeEl.value = 'off';
+    apartWrapEl.hidden = true;
+    countEl.value = '4';
+    resultEl.innerHTML = '<p class="result__empty">Groups will appear here.</p>';
+    hintEl.textContent = 'Saved data cleared.';
+  });
+
+  $('print').addEventListener('click', () => window.print());
+
+  restore();
+
+  if (rosterEl.value.trim()) run();
+</script>

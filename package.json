@@ -1,0 +1,25 @@
+{
+  "name": "fieldnotes-science",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Original study resources for environmental systems, ecology and biology.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run guard && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "guard": "node scripts/check-ip.mjs && node scripts/check-provenance.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.6",
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource-variable/sora": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.1",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^5.9.3"
+  }
+}

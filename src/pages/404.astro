@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <div class="shell nf">
+    <span class="eyebrow">404</span>
+    <h1>That page is not here</h1>
+    <p class="nf__lede">
+      The link may be out of date, or the page may have moved while the site was being reorganised.
+    </p>
+    <nav class="nf__links" aria-label="Suggested pages">
+      <a class="btn" href="/">Home</a>
+      <a class="btn btn--ghost" href="/ess">Environmental systems</a>
+      <a class="btn btn--ghost" href="/biology">Biology</a>
+      <a class="btn btn--ghost" href="/tools">Teacher tools</a>
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .nf {
+    padding-block: 6rem;
+    max-width: 46ch;
+  }
+
+  .nf h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+  }
+
+  .nf__lede {
+    color: var(--ink-muted);
+    font-size: 1.04rem;
+  }
+
+  .nf__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+</style>
