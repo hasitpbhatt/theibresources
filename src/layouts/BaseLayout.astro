@@ -17,14 +17,16 @@ interface Props {
 const { title, description = SITE.description, fullTitle, noindex = false } = Astro.props;
 
 const pageTitle = fullTitle ?? `${title} · ${SITE.name}`;
-const canonical = new URL(Astro.url.pathname, SITE.url).href;
-const ogImage = new URL('/og.png', SITE.url).href;
+// Astro.site comes from `site` in astro.config.mjs — the single source of truth.
+const siteUrl = Astro.site ?? new URL(SITE.url);
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = new URL('/og.png', siteUrl).href;
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: SITE.name,
-  url: SITE.url,
+  url: siteUrl.href,
   description: SITE.description,
   inLanguage: 'en',
 };

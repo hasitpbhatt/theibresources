@@ -3,7 +3,7 @@
 Original study notes, an assessment hub and a free teacher toolkit for
 environmental systems, ecology and biology.
 
-Live at <https://fieldnotesscience.pages.dev>.
+Live at <https://theibresources-by4.pages.dev>.
 
 ---
 
