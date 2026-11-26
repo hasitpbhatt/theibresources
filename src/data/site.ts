@@ -1,7 +1,7 @@
 export const SITE = {
   name: 'Fieldnotes Science',
   shortName: 'Fieldnotes',
-  url: 'https://fieldnotesscience.pages.dev',
+  url: 'https://theibresources-by4.pages.dev',
   tagline: 'Field-ready notes for environmental systems, ecology and biology.',
   description:
     'Original study notes, diagrams and classroom tools for environmental systems, ecology and biology — written from scratch, free to read, no account needed.',
