@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { SITE } from '../data/site';
+---
+
+<BaseLayout
+  title="About"
+  description="What Fieldnotes Science is, who writes it, how the content is produced and why there is a strict provenance rule behind every page."
+>
+  <div class="shell page">
+    <Breadcrumb items={[{ href: '/', label: 'Home' }, { label: 'About' }]} />
+
+    <header class="page__head">
+      <span class="eyebrow">About</span>
+      <h1>Notes from the field, written from scratch</h1>
+      <p class="page__lede">
+        {SITE.name} exists because good explanatory writing about environmental systems and biology is
+        hard to find in a form you can actually revise from — and because the honest version of that
+        writing has to be original.
+      </p>
+    </header>
+
+    <div class="prose">
+      <h2>The rule behind every page</h2>
+      <p>
+        If it came from an awarding body, it does not ship. Every diagram, explanation, table and
+        worked example on this site is written from scratch. There is no paraphrase pipeline, no
+        lightly-edited transcription, and no borrowed mark scheme. That is a harder way to build a
+        resource site, and it is the only way to build one that is both useful and legitimate.
+      </p>
+      <p>
+        Each content file carries provenance metadata recording where it came from. A build check
+        refuses to publish anything that is not marked as original work. If a source ever needs to be
+        staged for reference, it sits in a quarantined folder that the build never reads.
+      </p>
+
+      <h2>What that means for you</h2>
+      <ul>
+        <li>
+          <strong>You can trust the framing.</strong> Nothing here is a leak of protected material,
+          so nothing here will disappear under a takedown.
+        </li>
+        <li>
+          <strong>You can read it without an account.</strong> No sign-up wall, no email capture, no
+          cookie banner, because there are no cookies to consent to.
+        </li>
+        <li>
+          <strong>You can use it in class.</strong> Print it, project it, quote it with attribution.
+          Just do not republish it as your own.
+        </li>
+      </ul>
+
+      <h2>How the site is built</h2>
+      <p>
+        The site is a static build: every page is generated ahead of time and served from a CDN.
+        There is no application server, no database and no session. That architecture is why the
+        privacy claim is simple enough to be true — there is nowhere for data to be stored even if
+        someone wanted to collect it.
+      </p>
+      <p>
+        The teacher tools run entirely in your browser. A group split, a lesson agenda or a saved
+        roster lives in your device's local storage. Share links encode the configuration into the
+        URL fragment, which browsers never transmit to a server.
+      </p>
+
+      <h2>What is coming</h2>
+      <p>
+        A statistics primer for independent investigations, a timeline planner, and printable
+        fieldwork sheets. Further out: seating charts and a data-collation tool for class fieldwork.
+        Everything stays free, and everything stays client-side.
+      </p>
+
+      <h2>Corrections</h2>
+      <p>
+        Science writing goes stale, and mistakes happen. If something is wrong, unclear or out of
+        date, it is worth fixing — corrections are treated as improvements, not embarrassments.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 64ch;
+    margin-bottom: 2.6rem;
+  }
+
+  .page__lede {
+    font-size: 1.06rem;
+    color: var(--ink-muted);
+  }
+
+  .prose {
+    max-width: 68ch;
+  }
+
+  .prose h2 {
+    font-size: 1.12rem;
+    margin-top: 2.2rem;
+  }
+
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+</style>

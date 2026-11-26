@@ -1,0 +1,388 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const starters = [
+  { stem: 'Explain in one sentence why', tail: 'the same input can produce different outputs in a complex system.' },
+  { stem: 'Name one thing that would change if', tail: 'the limiting factor in this system were removed.' },
+  { stem: 'Give an example of', tail: 'a positive feedback loop you have seen outside this classroom.' },
+  { stem: 'Which is the stronger claim, and why:', tail: 'correlation or causation?' },
+  { stem: 'Sketch the system, then label', tail: 'the input, the store and the output.' },
+  { stem: 'What would you need to measure to test', tail: 'whether this trend is real or noise?' },
+  { stem: 'Explain the difference between', tail: 'a stock and a flow, using something in this room.' },
+  { stem: 'If this number were wrong by 10%,', tail: 'which conclusion would break first?' },
+  { stem: 'One word for how confident you are, and', tail: 'one reason for that word.' },
+  { stem: 'What did today change about', tail: 'how you would answer the question we started with?' },
+];
+---
+
+<BaseLayout
+  title="Exit ticket builder"
+  description="Generate short end-of-lesson checks from a bank of question stems, or write your own. Prints four to a page. No account, nothing uploaded."
+>
+  <div class="shell page">
+    <Breadcrumb
+      items={[
+        { href: '/', label: 'Home' },
+        { href: '/tools', label: 'Teacher tools' },
+        { label: 'Exit ticket builder' },
+      ]}
+    />
+
+    <header class="page__head">
+      <span class="eyebrow">Formative tool</span>
+      <h1>Exit ticket builder</h1>
+      <p class="page__lede">
+        Pick a few stems, add your own if you want, and print. Four tickets fit on one sheet, so a
+        class of thirty-two is eight copies.
+      </p>
+    </header>
+
+    <div class="app">
+      <div class="panel">
+        <p class="panel__title">Question stems</p>
+        <ul class="bank" id="bank"></ul>
+
+        <label class="field">
+          <span>Add your own — one per line</span>
+          <textarea id="custom" rows="4" spellcheck="false" placeholder="Explain why the water table fell in the dry season."></textarea>
+        </label>
+
+        <div class="actions">
+          <button class="btn" id="build" type="button">Build tickets</button>
+          <button class="btn btn--ghost" id="clear" type="button">Clear saved</button>
+        </div>
+        <p class="hint" id="hint" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="out">
+        <div class="sheet" id="sheet" aria-live="polite">
+          <p class="sheet__empty">Your tickets will appear here.</p>
+        </div>
+        <div class="actions actions--out">
+          <button class="btn btn--ghost" id="print" type="button">Print sheet</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="foot">
+      <div class="note">
+        <p>
+          <strong>One question beats five.</strong> An exit ticket that asks a single question you can
+          sort into "got it / nearly / not yet" gives you more than a page of short answers you will
+          not read before the next lesson.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 60ch;
+    margin-bottom: 2.4rem;
+  }
+
+  .page__lede {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+    gap: 1.6rem;
+    align-items: start;
+  }
+
+  .panel {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+    padding: 1.3rem 1.4rem;
+  }
+
+  .panel__title {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 0.8rem;
+  }
+
+  .bank {
+    list-style: none;
+    margin: 0 0 1.2rem;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .bank label {
+    display: grid;
+    grid-template-columns: 1.1rem 1fr;
+    gap: 0.55rem;
+    align-items: start;
+    font-size: 0.86rem;
+    color: var(--ink-muted);
+    line-height: 1.4;
+    cursor: pointer;
+    padding: 0.3rem 0.35rem;
+    border-radius: 2px;
+  }
+
+  .bank label:hover {
+    background: var(--paper-sunk);
+  }
+
+  .bank input {
+    margin-top: 0.22em;
+    accent-color: var(--accent);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+
+  .actions--out {
+    justify-content: flex-end;
+  }
+
+  .hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    min-height: 1.2em;
+    margin: 0.7rem 0 0;
+  }
+
+  .sheet__empty {
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius);
+    padding: 2.2rem 1rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  .tickets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .ticket {
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    padding: 0.8rem 0.9rem;
+    background: var(--paper-raised);
+    font-size: 0.82rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 7.5rem;
+  }
+
+  .ticket__head {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px dotted var(--rule-strong);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .ticket__q {
+    flex: 1;
+    font-family: var(--font-prose);
+    line-height: 1.45;
+  }
+
+  .ticket__q ol {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .ticket__q li + li {
+    margin-top: 0.5em;
+  }
+
+  .ticket__lines {
+    margin-top: 0.6rem;
+    height: 2.4rem;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 11px,
+      var(--rule) 11px,
+      var(--rule) 12px
+    );
+  }
+
+  .foot {
+    margin-top: 2.8rem;
+    max-width: 70ch;
+  }
+
+  @media (max-width: 56rem) {
+    .app {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media print {
+    .page__head,
+    .foot,
+    .panel,
+    .actions,
+    :global(header),
+    :global(footer) {
+      display: none !important;
+    }
+    .app {
+      display: block;
+    }
+    .ticket {
+      break-inside: avoid;
+    }
+  }
+</style>
+
+<script define:vars={{ starters }}>
+  const STORE = 'fn.exitTicket.v1';
+
+  const bankEl = document.getElementById('bank');
+  const customEl = document.getElementById('custom');
+  const sheetEl = document.getElementById('sheet');
+  const hintEl = document.getElementById('hint');
+
+  const state = { picked: new Set(), custom: '', perTicket: 2 };
+
+  function renderBank() {
+    bankEl.innerHTML = '';
+    starters.forEach((s, i) => {
+      const li = document.createElement('li');
+      const label = document.createElement('label');
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.checked = state.picked.has(i);
+      box.addEventListener('change', () => {
+        box.checked ? state.picked.add(i) : state.picked.delete(i);
+        save();
+      });
+      const text = document.createElement('span');
+      text.textContent = `${s.stem} ${s.tail}`;
+      label.append(box, text);
+      li.append(label);
+      bankEl.append(li);
+    });
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(
+        STORE,
+        JSON.stringify({ picked: [...state.picked], custom: customEl.value }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function restore() {
+    let data = null;
+    try {
+      const raw = localStorage.getItem(STORE);
+      if (raw) data = JSON.parse(raw);
+    } catch {
+      data = null;
+    }
+    if (!data) {
+      // A sensible default: the first four stems.
+      [0, 1, 4, 5].forEach((i) => state.picked.add(i));
+      renderBank();
+      return;
+    }
+    state.picked = new Set(data.picked ?? []);
+    customEl.value = data.custom ?? '';
+    renderBank();
+  }
+
+  function questions() {
+    const picked = [...state.picked].sort((a, b) => a - b).map((i) => `${starters[i].stem} ${starters[i].tail}`);
+    const custom = customEl.value
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    return [...picked, ...custom];
+  }
+
+  function build() {
+    const qs = questions();
+    if (qs.length === 0) {
+      sheetEl.innerHTML = '<p class="sheet__empty">Pick at least one stem or add your own.</p>';
+      hintEl.textContent = '';
+      return;
+    }
+
+    const copies = 4;
+    const per = Math.min(state.perTicket, qs.length);
+    const tickets = [];
+
+    for (let c = 0; c < copies; c++) {
+      const chosen = [];
+      for (let k = 0; k < per; k++) {
+        chosen.push(qs[(c * per + k) % qs.length]);
+      }
+      tickets.push(chosen);
+    }
+
+    sheetEl.innerHTML = `<div class="tickets">${tickets
+      .map(
+        (t, i) => `<div class="ticket">
+          <div class="ticket__head"><span>Exit ticket</span><span>${i + 1} / ${copies}</span></div>
+          <div class="ticket__q"><ol>${t.map((q) => `<li>${esc(q)}</li>`).join('')}</ol></div>
+          <div class="ticket__lines"></div>
+        </div>`,
+      )
+      .join('')}</div>`;
+
+    hintEl.textContent = `${qs.length} question${qs.length === 1 ? '' : 's'} in rotation · ${copies} tickets per sheet`;
+    save();
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  }
+
+  customEl.addEventListener('input', save);
+  document.getElementById('build').addEventListener('click', build);
+  document.getElementById('print').addEventListener('click', () => window.print());
+  document.getElementById('clear').addEventListener('click', () => {
+    try {
+      localStorage.removeItem(STORE);
+    } catch {
+      /* ignore */
+    }
+    state.picked = new Set([0, 1, 4, 5]);
+    customEl.value = '';
+    renderBank();
+    sheetEl.innerHTML = '<p class="sheet__empty">Your tickets will appear here.</p>';
+    hintEl.textContent = 'Saved data cleared.';
+  });
+
+  restore();
+</script>

@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const tools = [
+  {
+    href: '/tools/group-picker',
+    title: 'Group picker',
+    body: 'Split a class into balanced groups in one click, with a constraint for keeping certain students apart. Remembers your roster on this device.',
+    tag: 'Classroom',
+    ready: true,
+  },
+  {
+    href: '/tools/lesson-timer',
+    title: 'Lesson timer',
+    body: 'A visible countdown with an agenda board behind it. Runs through a sequence of timed segments so a lesson keeps its shape.',
+    tag: 'Classroom',
+    ready: true,
+  },
+  {
+    href: '/tools/exit-ticket',
+    title: 'Exit ticket builder',
+    body: 'Generate short end-of-lesson checks from a question bank, or write your own. Prints four to a page.',
+    tag: 'Formative',
+    ready: true,
+  },
+  {
+    href: '/tools/comment-bank',
+    title: 'Feedback comment bank',
+    body: 'Phrasing for the comments teachers write forty times a term, sorted by what the student needs to do next.',
+    tag: 'Feedback',
+    ready: true,
+  },
+];
+
+const principles = [
+  {
+    title: 'Nothing leaves the device',
+    body: 'Every tool runs entirely in the browser. Rosters, groups and notes are stored in this browser only — never uploaded, never logged.',
+  },
+  {
+    title: 'Share by link, not by account',
+    body: 'A configured tool can be encoded into its own URL. Send the link to a colleague and they see exactly what you set up. No sign-in either end.',
+  },
+  {
+    title: 'No account, ever',
+    body: 'There is nothing to register for. Clearing your browser data clears your saved rosters, and that is the whole data policy.',
+  },
+];
+---
+
+<BaseLayout
+  title="Teacher tools"
+  description="Free browser-based classroom tools for science teachers: group picker, lesson timer, exit ticket builder and feedback comment bank. No accounts, no tracking, everything runs on your device."
+>
+  <div class="shell page">
+    <Breadcrumb items={[{ href: '/', label: 'Home' }, { label: 'Teacher tools' }]} />
+
+    <header class="page__head">
+      <span class="eyebrow">Teacher tools</span>
+      <h1>Small tools that save a lesson</h1>
+      <p class="page__lede">
+        Four things that get used every week, built to load instantly and work without a network
+        connection once the page is open.
+      </p>
+    </header>
+
+    <section class="block">
+      <ul class="tools">
+        {
+          tools.map((t) => (
+            <li>
+              <a class="card tool" href={t.href}>
+                <span class="tool__top">
+                  <span class="tag tag--accent">{t.tag}</span>
+                  {t.ready ? (
+                    <span class="tool__status">Ready</span>
+                  ) : (
+                    <span class="tool__status tool__status--soon">Soon</span>
+                  )}
+                </span>
+                <span class="tool__title">{t.title}</span>
+                <span class="tool__body">{t.body}</span>
+                <span class="tool__cta">Open tool →</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>How these work</h2>
+      <ul class="principles">
+        {
+          principles.map((p) => (
+            <li>
+              <h3>{p.title}</h3>
+              <p>{p.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="note">
+        <p>
+          Because there is no server, there is also no sync. If you use two machines, you have two
+          sets of saved rosters. Use the share link to move a configuration between them.
+        </p>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Wanted</h2>
+      <p class="block__note">
+        Seating charts, live polling and fieldwork data collation are on the list. If a tool would
+        change how your week runs, it is worth asking for — the whole point is that these are cheap
+        to build and free to use.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 62ch;
+    margin-bottom: 3.2rem;
+  }
+
+  .page__lede {
+    font-size: 1.06rem;
+    color: var(--ink-muted);
+  }
+
+  .block + .block {
+    margin-top: 3.6rem;
+  }
+
+  .block__note {
+    color: var(--ink-muted);
+    max-width: 64ch;
+    font-size: 0.95rem;
+  }
+
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tool {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    height: 100%;
+  }
+
+  .tool__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .tool__status {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moss);
+  }
+
+  .tool__status--soon {
+    color: var(--ink-faint);
+  }
+
+  .tool__title {
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .tool__body {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .tool__cta {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    margin-top: 0.5rem;
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.4rem 2rem;
+    list-style: none;
+    margin: 0 0 1.6rem;
+    padding: 0;
+  }
+
+  .principles h3 {
+    font-size: 0.98rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .principles p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+  }
+</style>

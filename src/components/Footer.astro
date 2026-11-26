@@ -1,0 +1,104 @@
+---
+import { DISCLAIMER, NAV, SITE } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="shell">
+    <div class="site-footer__grid">
+      <div>
+        <p class="site-footer__brand">{SITE.name}</p>
+        <p class="site-footer__blurb">{SITE.tagline}</p>
+      </div>
+
+      <nav aria-label="Footer">
+        <ul class="site-footer__links">
+          {
+            NAV.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+          <li><a href="/about">About</a></li>
+          <li><a href="/disclaimer">Disclaimer &amp; licensing</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="site-footer__disclaimer">{DISCLAIMER}</p>
+    <p class="site-footer__meta">
+      © {year} {SITE.name}. Written and maintained independently. No accounts, no tracking.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 5rem;
+    border-top: 1px solid var(--rule);
+    background: var(--paper-sunk);
+    padding-block: 2.6rem 2rem;
+    font-size: 0.9rem;
+  }
+
+  .site-footer__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .site-footer__brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin: 0 0 0.25em;
+    font-size: 0.98rem;
+  }
+
+  .site-footer__blurb {
+    margin: 0;
+    max-width: 34ch;
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-footer__links a {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+
+  .site-footer__links a:hover {
+    color: var(--accent-deep);
+    text-decoration: underline;
+  }
+
+  .site-footer__disclaimer {
+    margin: 2.2rem 0 0;
+    padding-top: 1.3rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.76rem;
+    line-height: 1.6;
+    color: var(--ink-faint);
+    max-width: 90ch;
+  }
+
+  .site-footer__meta {
+    margin: 0.8rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+  }
+</style>

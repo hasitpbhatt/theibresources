@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { DISCLAIMER } from '../data/site';
+---
+
+<BaseLayout
+  title="Disclaimer"
+  description="Independence statement and trademark notice for Fieldnotes Science."
+>
+  <div class="shell page">
+    <Breadcrumb items={[{ href: '/', label: 'Home' }, { label: 'Disclaimer' }]} />
+
+    <header class="page__head">
+      <span class="eyebrow">Legal</span>
+      <h1>Disclaimer</h1>
+    </header>
+
+    <div class="prose">
+      <h2>Independence</h2>
+      <p>{DISCLAIMER}</p>
+
+      <h2>What this site is</h2>
+      <p>
+        Fieldnotes Science publishes original study notes, explanations and teaching tools for
+        environmental systems, ecology and biology. Every page of subject content is written from
+        scratch. Nothing on this site is reproduced, adapted or transcribed from any official
+        syllabus, specimen paper, mark scheme, textbook or programme publication.
+      </p>
+
+      <h2>What this site is not</h2>
+      <ul>
+        <li>It is not affiliated with, endorsed by or sponsored by any awarding body.</li>
+        <li>It is not an official source of assessment requirements or deadlines.</li>
+        <li>
+          It does not publish exemplar coursework, complete reports, mark schemes or anything a
+          student could submit as their own work.
+        </li>
+        <li>It is not a substitute for the guidance issued to your school or your teacher.</li>
+      </ul>
+
+      <h2>Accuracy</h2>
+      <p>
+        Content is written carefully and reviewed, but science teaching material is always a
+        simplification. Where a detail matters for an assessment, check it against the current
+        requirements issued by your school. No warranty is given for fitness for a particular purpose.
+      </p>
+
+      <h2>External links</h2>
+      <p>
+        Links to third-party sites are provided for convenience. Their content, availability and
+        privacy practices are outside this site's control, and a link is not an endorsement.
+      </p>
+
+      <h2>Trademarks</h2>
+      <p>
+        Programme names and abbreviations referenced anywhere on this site are the trademarks of
+        their respective owners. They are used only descriptively, to indicate the audience for whom
+        a page may be relevant. No claim of affiliation is made or implied.
+      </p>
+
+      <h2>Privacy in one paragraph</h2>
+      <p>
+        There are no accounts, no analytics, no cookies and no server-side storage of anything you
+        type. Teacher tools keep their state in your browser's local storage on your own device.
+        Clearing your browser data removes it permanently.
+      </p>
+
+      <h2>Licence</h2>
+      <p>
+        The written notes, diagrams and question stems on this site are licensed under
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license noopener">
+          Creative Commons BY-NC-SA 4.0</a
+        >. You may print, adapt and share them for non-commercial teaching and study, as long as you
+        credit Fieldnotes Science and keep the same licence on anything you build from them.
+      </p>
+      <p>
+        The site's source code — layouts, components and the four teacher tools — is licensed under
+        the MIT licence. See <code>LICENSE</code> in the repository.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    margin-bottom: 2.4rem;
+  }
+
+  .prose {
+    max-width: 68ch;
+  }
+
+  .prose h2 {
+    font-size: 1.12rem;
+    margin-top: 2.2rem;
+  }
+
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+</style>

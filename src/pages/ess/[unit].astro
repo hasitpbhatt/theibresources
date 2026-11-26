@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const units = await getCollection('units', (u) => u.data.subject === 'ess');
+  return units.map((unit) => ({ params: { unit: unit.data.code }, props: { unit } }));
+}
+
+const { unit } = Astro.props;
+const { Content, headings } = await render(unit);
+
+const siblings = (await getCollection('units', (u) => u.data.subject === 'ess'))
+  .filter((u) => u.data.status === 'published')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const index = siblings.findIndex((u) => u.id === unit.id);
+const prev = index > 0 ? siblings[index - 1] : null;
+const next = index >= 0 && index < siblings.length - 1 ? siblings[index + 1] : null;
+
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<BaseLayout title={unit.data.title} description={unit.data.summary}>
+  <div class="shell page">
+    <Breadcrumb
+      items={[
+        { href: '/', label: 'Home' },
+        { href: '/ess', label: 'Environmental systems' },
+        { label: unit.data.title },
+      ]}
+    />
+
+    <div class="layout">
+      <article>
+        <header class="head">
+          <span class="eyebrow">
+            {unit.data.level === 'hl-only' ? 'HL lens' : `Unit ${unit.data.order}`}
+          </span>
+          <h1>{unit.data.title}</h1>
+          <p class="head__summary">{unit.data.summary}</p>
+          <div class="head__tags">
+            <span class="tag">{unit.data.level === 'hl-only' ? 'HL only' : 'SL + HL'}</span>
+            <span class="tag">{headings.length} sections</span>
+            <span class="tag tag--moss">Original</span>
+          </div>
+        </header>
+
+        <div class="prose body">
+          <Content />
+        </div>
+
+        <nav class="pager" aria-label="Unit navigation">
+          {
+            prev ? (
+              <a class="pager__link" href={`/ess/${prev.data.code}`}>
+                <span class="pager__label">Previous</span>
+                <span class="pager__title">{prev.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next ? (
+              <a class="pager__link pager__link--right" href={`/ess/${next.data.code}`}>
+                <span class="pager__label">Next</span>
+                <span class="pager__title">{next.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+        </nav>
+      </article>
+
+      {
+        toc.length > 1 && (
+          <aside class="toc">
+            <p class="toc__label">On this page</p>
+            <ul>
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    gap: 3.5rem;
+    align-items: start;
+  }
+
+  .head {
+    max-width: 62ch;
+    padding-bottom: 2rem;
+    margin-bottom: 2.2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .head__summary {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+  }
+
+  .head__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .body :global(h2) {
+    scroll-margin-top: 5rem;
+  }
+
+  .body :global(h3) {
+    scroll-margin-top: 5rem;
+  }
+
+  .body :global(table) {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 56rem) {
+    .body :global(table) {
+      white-space: normal;
+    }
+  }
+
+  .toc {
+    position: sticky;
+    top: 5.5rem;
+    font-size: 0.85rem;
+    border-left: 1px solid var(--rule);
+    padding-left: 1.1rem;
+  }
+
+  .toc__label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 0.8em;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc li + li {
+    margin-top: 0.45em;
+  }
+
+  .toc a {
+    color: var(--ink-muted);
+    text-decoration: none;
+    line-height: 1.4;
+    display: block;
+  }
+
+  .toc a:hover {
+    color: var(--accent-deep);
+  }
+
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3.5rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .pager__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    max-width: 45%;
+  }
+
+  .pager__link--right {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .pager__label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .pager__title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-deep);
+  }
+
+  @media (max-width: 56rem) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .toc {
+      display: none;
+    }
+  }
+</style>

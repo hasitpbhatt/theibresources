@@ -1,0 +1,311 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const phases = [
+  {
+    n: '01',
+    window: 'Weeks 1–3',
+    title: 'Choosing something you can finish',
+    lead: 'The most common failure is a question that is interesting, important, and impossible within 4,000 words.',
+    good: 'How has urban expansion between 2005 and 2025 changed the flood regime of one named river basin?',
+    bad: 'How can we solve climate change?',
+    why: 'An extended essay is an argument, not a survey. The strong question has a bounded case, a defined period and a claim someone could dispute. The weak one has no case to examine and no position to defend.',
+    actions: [
+      'Write the question in one sentence with no "and"',
+      'Name the specific case, period or system you will examine',
+      'Find three sources before committing — if you cannot, change the question',
+      'Check your subject has a plausible method for answering it',
+    ],
+  },
+  {
+    n: '02',
+    window: 'Weeks 4–8',
+    title: 'Reading toward a position',
+    lead: 'Reading is not collecting quotes. It is finding out what the disagreement is about.',
+    good: 'A source grid: claim, method, sample, limitation — and a note on how each source bears on your question.',
+    bad: 'A folder of PDFs with highlighted sentences and no notes on why they matter.',
+    why: 'An argument needs opposing views to push against. Reading only material that agrees with your first instinct produces a summary, not an essay. The grid forces you to record what each source cannot show.',
+    actions: [
+      'Build a source grid with a limitations column',
+      'Deliberately seek two sources that contradict your working thesis',
+      'Record page numbers as you read, not afterwards',
+      'Note where sources disagree on facts, not just interpretation',
+    ],
+  },
+  {
+    n: '03',
+    window: 'Weeks 9–12',
+    title: 'Building the argument',
+    lead: 'Structure is the argument made visible. If the reader cannot predict your next section, the argument is not yet clear.',
+    good: 'Each section advances a claim, and the section order is the order in which the claims have to be believed.',
+    bad: 'Background, then three examples, then a conclusion that restates the introduction.',
+    why: 'A common failure is the "and also" essay, where paragraphs sit side by side without depending on each other. A real argument has a shape: claim, evidence, counter-claim, response, implication.',
+    actions: [
+      'Write the section headings before writing the sections',
+      'State each paragraph claim in a single sentence you could delete-test',
+      'Give counter-arguments their strongest form, then answer them',
+      'Keep description to what the argument needs',
+    ],
+  },
+  {
+    n: '04',
+    window: 'Weeks 13–16',
+    title: 'Revising with a reader in mind',
+    lead: 'The first complete draft is a milestone, not a finished essay. The marks are in the revision.',
+    good: 'A read-through that checks every claim for evidence, every citation for accuracy and every paragraph for a job.',
+    bad: 'Spell-check and submit.',
+    why: 'Revision is where you catch the two things readers punish most: claims that outrun the evidence, and citations that do not support the sentence they are attached to. Both are invisible while you are drafting.',
+    actions: [
+      'Read the essay aloud — awkward sentences surface immediately',
+      'Check every citation points at the source that actually says it',
+      'Cut any claim you cannot support in one sentence',
+      'Confirm the conclusion answers the question in the title',
+    ],
+  },
+  {
+    n: '05',
+    window: 'Throughout',
+    title: 'The reflection and the supervisor',
+    lead: 'Reflection is not a diary. It is evidence that you made decisions and can explain them.',
+    good: 'A note after each meeting: what changed in my thinking, what I decided, and why.',
+    bad: 'A page written the week before submission summarising what happened.',
+    why: 'Reflection written at the time captures the reasoning that disappears once the work is finished. Written retrospectively, it can only describe outcomes. The former demonstrates engagement; the latter reads as compliance.',
+    actions: [
+      'Bring one specific problem to each supervisor meeting',
+      'Write three sentences after every meeting, same day',
+      'Record decisions you reversed and what changed your mind',
+      'Ask for feedback on your argument, not on your grammar',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Extended essay"
+  description="A phase-by-phase guide to the 4,000-word research essay: framing an answerable question, reading toward a position, building an argument and revising with a reader in mind."
+>
+  <div class="shell page">
+    <Breadcrumb
+      items={[
+        { href: '/', label: 'Home' },
+        { href: '/assessment', label: 'Assessment hub' },
+        { label: 'Extended essay' },
+      ]}
+    />
+
+    <header class="page__head">
+      <span class="eyebrow">Assessment hub</span>
+      <h1>The 4,000-word argument</h1>
+      <p class="page__lede">
+        Five phases across roughly sixteen weeks. Each pairs a strong habit with the weak one it
+        replaces, then lists what to do before moving on.
+      </p>
+      <div class="note note--warn">
+        <p>
+          <strong>Nothing here is submittable.</strong> No exemplar essays, no model paragraphs to
+          copy. The <a href="/assessment">assessment hub</a> explains why that is a deliberate limit.
+        </p>
+      </div>
+    </header>
+
+    <ol class="phases">
+      {
+        phases.map((p) => (
+          <li class="phase">
+            <div class="phase__head">
+              <span class="phase__n">{p.n}</span>
+              <div>
+                <span class="phase__window">{p.window}</span>
+                <h2>{p.title}</h2>
+              </div>
+            </div>
+            <p class="phase__lead">{p.lead}</p>
+
+            <div class="compare">
+              <div class="compare__col compare__col--good">
+                <span class="compare__label">Stronger habit</span>
+                <p>{p.good}</p>
+              </div>
+              <div class="compare__col compare__col--bad">
+                <span class="compare__label">Weaker habit</span>
+                <p>{p.bad}</p>
+              </div>
+            </div>
+
+            <p class="phase__why">{p.why}</p>
+
+            <div class="checks">
+              <p class="checks__label">Do this before moving on</p>
+              <ul>
+                {p.actions.map((a) => (
+                  <li>{a}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <section class="foot">
+      <div class="note">
+        <p>
+          <strong>Related:</strong> the <a href="/assessment/internal-assessment">investigation guide</a>
+          covers method design and data handling, which many extended essays in the sciences also
+          need.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 66ch;
+    margin-bottom: 3.4rem;
+  }
+
+  .page__lede {
+    font-size: 1.06rem;
+    color: var(--ink-muted);
+  }
+
+  .note--warn {
+    margin-top: 1.6rem;
+  }
+
+  .phases {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .phase {
+    max-width: 70ch;
+    padding-block: 2.4rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .phase:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .phase__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .phase__n {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    padding-top: 0.25em;
+  }
+
+  .phase__window {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.3em;
+  }
+
+  .phase__head h2 {
+    font-size: 1.32rem;
+    margin: 0;
+  }
+
+  .phase__lead {
+    color: var(--ink-muted);
+    font-size: 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .compare__col {
+    border: 1px solid var(--rule);
+    border-left-width: 3px;
+    border-radius: var(--radius);
+    padding: 0.9rem 1.1rem;
+    background: var(--paper-raised);
+  }
+
+  .compare__col--good {
+    border-left-color: var(--moss);
+  }
+
+  .compare__col--bad {
+    border-left-color: var(--accent);
+  }
+
+  .compare__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.45em;
+  }
+
+  .compare__col p {
+    margin: 0;
+    font-family: var(--font-prose);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .phase__why {
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    max-width: 66ch;
+  }
+
+  .checks {
+    margin-top: 1.4rem;
+    background: var(--paper-sunk);
+    border-radius: var(--radius);
+    padding: 1rem 1.3rem;
+  }
+
+  .checks__label {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 0.6em;
+  }
+
+  .checks ul {
+    margin: 0;
+    padding-left: 1.05rem;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+  }
+
+  .checks li + li {
+    margin-top: 0.35em;
+  }
+
+  .foot {
+    margin-top: 2.6rem;
+    max-width: 70ch;
+  }
+</style>

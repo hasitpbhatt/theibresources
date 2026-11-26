@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { SUBJECTS } from '../../data/site';
+
+const all = await getCollection('units', (u) => u.data.subject === 'ess');
+const sorted = all.sort((a, b) => a.data.order - b.data.order);
+const units = sorted.filter((u) => u.data.level === 'sl-hl');
+const lenses = sorted.filter((u) => u.data.level === 'hl-only');
+---
+
+<BaseLayout
+  title="Environmental systems"
+  description={SUBJECTS.ess.blurb}
+>
+  <div class="shell page">
+    <Breadcrumb items={[{ href: '/', label: 'Home' }, { label: 'Environmental systems' }]} />
+
+    <header class="page__head">
+      <span class="eyebrow">Subject notes</span>
+      <h1>Environmental systems</h1>
+      <p class="page__lede">{SUBJECTS.ess.blurb}</p>
+      <p class="page__meta">
+        {units.length} core units · {lenses.length} HL lenses · every page written from scratch
+      </p>
+    </header>
+
+    <section class="block">
+      <h2 class="block__title">Core units</h2>
+      <ul class="grid">
+        {
+          units.map((unit, i) => (
+            <li>
+              <a class="card unit-card" href={`/ess/${unit.data.code}`}>
+                <span class="unit-card__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="unit-card__title">{unit.data.title}</span>
+                <span class="unit-card__summary">{unit.data.summary}</span>
+                <span class="unit-card__outline">
+                  {unit.data.outline.slice(0, 4).map((line) => (
+                    <span class="unit-card__pill">{line}</span>
+                  ))}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      lenses.length > 0 && (
+        <section class="block">
+          <h2 class="block__title">HL lenses</h2>
+          <p class="block__note">
+            Higher level only. These take the same environmental problems and read them through a
+            legal, economic or ethical framework.
+          </p>
+          <ul class="grid">
+            {lenses.map((unit, i) => (
+              <li>
+                <a class="card unit-card" href={`/ess/${unit.data.code}`}>
+                  <span class="unit-card__num">HL {i + 1}</span>
+                  <span class="unit-card__title">{unit.data.title}</span>
+                  <span class="unit-card__summary">{unit.data.summary}</span>
+                  <span class="unit-card__outline">
+                    {unit.data.outline.slice(0, 4).map((line) => (
+                      <span class="unit-card__pill">{line}</span>
+                    ))}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 2.4rem 0;
+  }
+
+  .page__head {
+    max-width: 60ch;
+    margin-bottom: 3rem;
+  }
+
+  .page__lede {
+    font-size: 1.06rem;
+    color: var(--ink-muted);
+  }
+
+  .page__meta {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0;
+  }
+
+  .block + .block {
+    margin-top: 3.4rem;
+  }
+
+  .block__title {
+    margin-bottom: 0.4rem;
+  }
+
+  .block__note {
+    color: var(--ink-muted);
+    max-width: 62ch;
+    font-size: 0.94rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .unit-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 0.4rem;
+  }
+
+  .unit-card__num {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .unit-card__title {
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .unit-card__summary {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .unit-card__outline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+  }
+
+  .unit-card__pill {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 0.16em 0.5em;
+    background: var(--paper);
+  }
+</style>
